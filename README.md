@@ -1,4 +1,3 @@
-# hello-world
-Hello world!
-
-Me editing README.md ^_^
+25-07-2020:
+-----------
+- Inital version of README.md
