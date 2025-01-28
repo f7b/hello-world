@@ -1,2 +1,2 @@
-Repo for learning using Git.  
+Repo for learning Git.  
 Nothing special to see here. :)
