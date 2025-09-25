@@ -1,9 +1,5 @@
 Git cheat-sheet:
 ----------------
-<<<<<<< HEAD
-[Git Docu](https://git-scm.com/doc)  
-=======
->>>>>>> 70ca650 (Update 'cheat-sheet' and 'README.md' files)
 git log master...playground               Show only the work your current topic branch has introduced since its common ancestor with master
 git log playground --not master           Excludes commits in the master branch
 git log -p                                Appends the diff introduced to each commit
