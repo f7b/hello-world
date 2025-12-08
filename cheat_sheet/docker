@@ -1,3 +1,20 @@
 Docker cheat-sheet:
 -------------------
+docker container run --rm <image>                                                                               - remove a container automatically with the '--rm' as soon as a process will stop running (press 'ctrl+c' to stop the running container)
+docker container ls -a                                                                                          - list all containers on a system
+docker container run -d --name <name> <image>                                                                   - start the new container with a given name in the background and receive the container ID
+docker container logs <name>                                                                                    - view the container logs
+docker container stop <name>                                                                                    - stop the running container
+docker container rm -f <name>                                                                                   - stop and remove the container in one step
+docker container run -d --name <name> <image>                                                                   - start the new container with a given name in the background and receive the container ID
+docker container run -d --name <name> -p <port> <image>                                                         - let docker decide what publish port will be used in combination with the specified listening <port>
+docker container run -d --name <name> -p <port> -v /where/to/mount/volume:/with/path/inside/container <image>   - use volume, example: /tmp/mountpoint:/srv/html
+docker container inspect <name> | jq '.'                                                                        - view the container details in the YAML output, same idea as 'setup' module or facts with Ansible
+docker container inspect <name> | jq -r '.[0].NetworkSettings.Ports."8080/tcp"[0].HostPort'                     - raw output showing the first matching item for setting 'NetworkSettings' and 'HostPort' for 8080/tcp port
 
+docker-compose --help                                   - all commands for docker-compose command
+docker-compose ps                                       - show processes of the project
+docker-compose down                                     - stop and remove all containers which belong to the project
+
+docker image build -t <name> /path/to/Dockerfile        - build a docker image from a Dockerfile with a given name
+docker image ls                                         - list all docker images

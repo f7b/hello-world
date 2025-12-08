@@ -1,6 +1,41 @@
 Git cheat-sheet:
 ----------------
-git log master...playground               Show only the work your current topic branch has introduced since its common ancestor with master
-git log playground --not master           Excludes commits in the master branch
-git log -p                                Appends the diff introduced to each commit
-git diff --cached                         View the changes you staged for the next commit, --staged is a synonym of --cached
+git log master...playground               - Show only the work your current topic branch has introduced since its common ancestor with master
+git log playground --not master           - Excludes commits in the master branch
+git log -p                                - Appends the diff introduced to each commit
+
+git diff --cached                         - View the changes you staged for the next commit, --staged is a synonym of --cached
+get diff --check                          - Warn if changes introduce conflict markers or whitespace errors
+
+git reflog                                - A log of where your HEAD and branch references have been for the last few months, alias cmd is 'git update-ref'
+git reset --hard HEAD@{N}                 - reset HEAD to commit N, effectively discarding all commits and changes made after N, get commit refs with 'git reflog'
+git rebase -i HEAD~2^|HEAD~3              - Edit interactively the parent of the last commit with rebase, every commit in the range HEAD~3..HEAD with a changed message and all of its descendants will be rewritten
+git show HEAD~|^                          - If you place a ~ (tilde) or a ^ (caret) at the end of a reference, Git will show the parent of that commit (HEAD in this example, HEAD~2 means “the first parent of the first parent” or “the grandparent”)
+
+git stash (push)                          - (Push) a new stash onto Git stack
+git stash list                            - List all stacked entries
+git stash apply <stash@N>                 - Apply the latest stacked entry (with no given name), or specify the entry from the stack
+git stash apply --index                   - Tell the command to try to reapply the staged changes
+git stash drop <stash@{N}>                - Run (with the name of the stash) to remove stacked entry
+git stash branch <branch> <stash>         - Create and checkout a new <branch> starting from the commit at which the <stash> was originally created, then drop <stash> if <branch> is created successfully
+
+git blame                                 - View what commit was the last to modify each line of any file, annotation tool
+git blame -L <line1>,<line2> <file>       - Restrict the output of the annotation to lines <line1> through <line2> of the <file>
+git blame -C <file>                       - Analyze the <file> you’re annotating and try to figure out where snippets of code within it originally came from if they were copied from elsewhere
+
+git bisect [options]                      - Binary search through the commit history to identify as quickly as possible which commit introduced an issue
+git bisect start                          - Start the binary search
+git bisect bad                            - Tell the system that the current commit is broken
+git bisect good <commit>                  - Tell bisect when the last known good state was
+git bisect bad                            - Tell Git when the re-tested commit is broken and has started the issue
+git bisect good                           - Tell Git when the following re-tested commit is working as expected, now Git has all the information it needs to determine where the issue was introduced
+git bisect reset                          - Reset your HEAD to where you were before you started the binary search
+
+git submodule add <URL> <name>            - Add an existing Git repository as a submodule of the repository you’re working on with the given <name>, submodules allow you to keep a Git repository as a subdirectory of another Git repository
+git submodule init                        - Initialize your local configuration file (.gitmodules - The file that stores the mapping between the project’s URL and the local subdirectory you’ve pulled it into)
+git submodule update                      - Fetch all the data from that project and check out the appropriate commit listed in your superproject
+                                          - 'git log -1 <module_name>' helps to tshoot uncommited changes in the local module uncommited changes
+
+git read-tree                                      - Reads tree information into the index. Optionally, it can merge a tree into the index, perform a fast-forward (i.e. 2-way) merge, or a 3-way merge, with the -m flag
+git read-tree --prefix=folder/ -u <remote_branch>  - Pull the 'remote_branch' branch into the 'folder' subdirectory of the current working branch
+git diff-tree <tree_branch>                        - See the difference between a specific subdirectory (like a vendor folder) and a separate branch to check for pending merges
