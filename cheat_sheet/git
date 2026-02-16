@@ -3,6 +3,12 @@ Git cheat-sheet:
 git log master...playground               - Show only the work your current topic branch has introduced since its common ancestor with master
 git log playground --not master           - Excludes commits in the master branch
 git log -p                                - Appends the diff introduced to each commit
+git log -g                                - Display the reflog designator in the log output as 'ref@{<N>}' or as 'ref@{<timestamp>}'
+
+git branch recover-branch <commit>        - recover the <commit> by creating a new 'recover_branch' at that commit
+git fsck --full                           - an utility, which checks Git database for integrity, if you run it with the '--full' option, it shows you all objects that aren’t pointed to by another object
+                                            - used to recover the reflog data which are kept in the '.git/logs/' directory
+git count-objects -v                      - quickly see how much space you’re using
 
 git diff --cached                         - View the changes you staged for the next commit, --staged is a synonym of --cached
 get diff --check                          - Warn if changes introduce conflict markers or whitespace errors
@@ -35,7 +41,26 @@ git submodule add <URL> <name>            - Add an existing Git repository as a 
 git submodule init                        - Initialize your local configuration file (.gitmodules - The file that stores the mapping between the project’s URL and the local subdirectory you’ve pulled it into)
 git submodule update                      - Fetch all the data from that project and check out the appropriate commit listed in your superproject
                                           - 'git log -1 <module_name>' helps to tshoot uncommited changes in the local module uncommited changes
+git push origin :topic                    - use the refspec to delete references from the remote server, because the refspec is <src>:<dst>, by leaving off the <src> part, this basically says to make the 'topic' branch on the remote nothing, which deletes it
+git push origin --delete topic            - the newer command syntax
 
-git read-tree                                      - Reads tree information into the index. Optionally, it can merge a tree into the index, perform a fast-forward (i.e. 2-way) merge, or a 3-way merge, with the -m flag
-git read-tree --prefix=folder/ -u <remote_branch>  - Pull the 'remote_branch' branch into the 'folder' subdirectory of the current working branch
-git diff-tree <tree_branch>                        - See the difference between a specific subdirectory (like a vendor folder) and a separate branch to check for pending merges
+plumbing commands (low-level):
+------------------------------
+git read-tree                                              - Reads tree information into the index. Optionally, it can merge a tree into the index, perform a fast-forward (i.e. 2-way) merge, or a 3-way merge, with the -m flag
+git read-tree --prefix=folder/ -u <remote_branch>          - Pull the 'remote_branch' branch into the 'folder' subdirectory of the current working branch
+git diff-tree <tree_branch>                                - See the difference between a specific subdirectory (like a vendor folder) and a separate branch to check for pending merges
+git cat-file <type> <object>                               - Output the contents or other properties such as size, type or delta information of one or more objects, use -p for "pretty" output
+test/ export-ignore                                        - Test files in a 'test/' subdirectory won’t be included in the archive after running 'git archive' command
+git ls-tree                                                - List the contents of a given tree object, like what "/bin/ls -a" does in the current working directory
+echo 'a content' | git hash-object -w --stdin              - take the stdin content handed to the 'echo' command and merely return the unique hash key that would be used to store it in the Git database, the -w option then tells the command to not simply return the key, but to write that object to the database
+git cat-file -p master^{tree}                              - the 'master^{tree}' syntax specifies the tree object that is pointed to by the last commit on the 'master' branch, in Windows use the 'master^^{tree}' syntax
+git update-index --add --cacheinfo <mode> <object> <file>  - artificially add the earlier version of the <file> to a new staging area, the '--add' option must be added because the <file> doesn’t yet exist in the staging area and the '--cacheinfo' option adds the <file> to the working directory from the Git database
+                                                             - modes: 100644 = a normal file, 100755 = an executable file, 120000 = a symbolic link
+git write-tree                                             - write the staging area out to a tree object, the output is a hash of the tree object
+echo 'First commit' | git commit-tree <object>             - create a commit object for the tree object's hash obtained from the previous command
+git update-ref refs/heads/<branch> <hash>                  - update the reference 'branch' file with the 'hash' of a selected commit
+git symbolic-ref HEAD                                      - read the value of your HEAD
+git gc                                                     - the “gc” stands for garbage collect, ask Git to pack up the objects, this process optimizes repository storage by packing objects and cleaning up old, unreachable data
+git verify-pack -v .git/objects/pack/pack-<hash>           - look into the packfile and see what Git did to save space, when Git packs objects, it looks for files that are named and sized similarly, and stores just the deltas from one version of the file to the next
+git rev-list <commit>                                      - basically the same as the 'git log' command, but by default it prints out only the SHA-1 values and no other information, if you add the '--objects' option, it lists all the commit SHA-1s and also the blob SHA-1s with the file paths associated with them
+git rm <pathspec>                                          - remove files matching 'pathspec' from the index, or from the working tree and the index. the command removes only the paths that are known to Git
