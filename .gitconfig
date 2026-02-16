@@ -1,0 +1,32 @@
+[user]
+	name = f7b
+	email = fatb0y@proton.me
+
+[alias]
+	bd = branch -d
+	bdd = branch -D
+	br = branch -r
+	ca = commit --amend
+	cge = config --global --edit
+	cl = config --list
+	cm = commit -m
+	co = checkout
+	cob = checkout -b
+	dc = diff --cached
+	f = fetch
+	fu = fetch upstream
+	l = log --all --decorate --oneline --graph
+	last = log -1 -p
+	rv = remote -v
+	s = status
+	sh = show
+
+[core]
+	pager = less
+	autocrlf = input
+
+[diff]
+	tool = vimdiff
+
+[difftool]
+    prompt = false
